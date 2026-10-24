@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="StreamPulse turns Twitch chat reactions into live moments, chapters, and recaps without accounts or tokens.">
+  <meta name="color-scheme" content="dark">
+  <title>StreamPulse — Twitch chat moments, live</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/landing.css">
+</head>
+<body class="landing-page">
+  <header class="site-header">
+    <a class="brand-lockup" href="index.html" aria-label="StreamPulse home">
+      <span class="brand-mark" aria-hidden="true"></span><span>StreamPulse</span>
+    </a>
+    <a class="header-link" href="#setup">OBS setup</a>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-content">
+        <p class="hero-kicker">Live Twitch chat signal</p>
+        <h1 id="hero-title">StreamPulse</h1>
+        <p class="hero-copy">Catch the moments when your community erupts. Leave the stream with timestamps, chapters, and a recap ready to publish.</p>
+        <form class="channel-launcher" id="channel-form" novalidate>
+          <label for="channel">Twitch channel</label>
+          <div class="channel-row">
+            <span aria-hidden="true">twitch.tv/</span>
+            <input id="channel" name="channel" type="text" inputmode="text" autocomplete="off" maxlength="25" pattern="[A-Za-z0-9_]{1,25}" placeholder="your_channel" required>
+          </div>
+          <p class="field-error" id="channel-error" role="alert"></p>
+          <div class="hero-actions">
+            <button type="submit" data-destination="overlay">Open overlay</button>
+            <button type="button" data-open="dashboard">Open dashboard</button>
+            <a class="button demo-button" href="demo.html">Try demo (no stream needed)</a>
+          </div>
+        </form>
+      </div>
+      <div class="live-readout" aria-hidden="true"><span></span> Pulse detected <strong id="hero-rate">24</strong> / 5s</div>
+    </section>
+
+    <section class="config-band" id="setup" aria-labelledby="setup-title">
+      <div class="config-inner">
+        <div class="config-heading">
+          <p class="section-number">01 / Configure</p>
+          <h2 id="setup-title">Your browser source URL</h2>
+          <p>Set it once in OBS at 1920 × 1080. The page stays transparent.</p>
+        </div>
+        <div class="controls-grid">
+          <label>Sensitivity <output id="sensitivity-value">5</output>
+            <input id="sensitivity" type="range" min="1" max="10" value="5">
+          </label>
+          <label>Community mark
+            <select id="marks">
+              <option value="2">2 chatters</option><option value="3" selected>3 chatters</option><option value="4">4 chatters</option><option value="5">5 chatters</option><option value="8">8 chatters</option>
+            </select>
+          </label>
+          <label>Theme
+            <select id="theme"><option value="neon">Neon</option><option value="clean">Clean</option></select>
+          </label>
+          <label>Corner
+            <select id="corner"><option value="br">Bottom right</option><option value="bl">Bottom left</option><option value="tr">Top right</option><option value="tl">Top left</option></select>
+          </label>
+          <label class="check-control"><input id="rain" type="checkbox" checked> Emote rain</label>
+        </div>
+        <div class="url-box">
+          <label for="obs-url">OBS Browser Source URL</label>
+          <div><input id="obs-url" type="text" readonly><button type="button" id="copy-url" aria-label="Copy OBS Browser Source URL">Copy</button></div>
+          <p id="copy-status" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="steps-band" aria-labelledby="steps-title">
+      <div class="steps-inner">
+        <p class="section-number">02 / Go live</p>
+        <h2 id="steps-title">Three steps. No install.</h2>
+        <ol class="steps-list">
+          <li><span>1</span><div><strong>Paste the URL</strong><p>Add an OBS Browser Source and use the generated link.</p></div></li>
+          <li><span>2</span><div><strong>Set the canvas</strong><p>Use 1920 × 1080; custom CSS is not required.</p></div></li>
+          <li><span>3</span><div><strong>Open the dashboard</strong><p>Keep it nearby for the live graph, moments, and exports.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="privacy-band" aria-labelledby="privacy-title">
+      <p class="section-number">03 / Private by design</p>
+      <h2 id="privacy-title">Chat goes from Twitch to your browser. Nowhere else.</h2>
+      <p>Anonymous read-only chat, no account, no token, no backend, and no analytics. Privacy mode keeps usernames out of exports.</p>
+    </section>
+  </main>
+  <footer><span>StreamPulse</span><a href="README.md">Documentation</a><span>MIT licensed</span></footer>
+  <script type="module" src="js/ui-landing.js"></script>
+</body>
+</html>
