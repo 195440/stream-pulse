@@ -4,6 +4,17 @@ StreamPulse is a zero-install Twitch chat overlay and streamer dashboard. It wat
 
 It is built for small and mid-size streamers who need to find the good parts of a long VOD without paying for an editor or trusting a clipping backend.
 
+**Try it now (no install):** [offline demo](https://195440.github.io/stream-pulse/demo.html) ·
+[landing page](https://195440.github.io/stream-pulse/) · live on any channel:
+`https://195440.github.io/stream-pulse/overlay.html?channel=<twitch_login>`
+
+## Built with Codex
+
+All application code and tests (and the body of this README) were written by OpenAI Codex from [`SPEC.md`](SPEC.md) in one
+resumable thread; the human-side assistant wrote the spec, verified it in real browsers and made two small edits. The
+session ID, setup and the honest split of work are documented in
+[`docs/BUILT_WITH_CODEX.md`](docs/BUILT_WITH_CODEX.md).
+
 ## 60-second quickstart
 
 Requirements: Node.js 18+ for tests and Python 3 (or any static file server) for local use.
@@ -67,7 +78,7 @@ A community moment fires when the configured number of unique users type `!mark`
 
 Everything runs in the browser. There is no StreamPulse server, account, token, database, analytics script, runtime AI call, or telemetry. Live chat is received through Twitch's anonymous read-only IRC WebSocket connection. Session state is stored only in the browser's `localStorage` and in files the user explicitly exports.
 
-Privacy mode is on by default. Exports include aggregate counts rather than usernames. Twitch emote images are loaded directly from Twitch's public CDN in live overlay mode; the synthetic demo uses local text badges and works offline.
+Privacy mode is on by default. Exports include aggregate counts rather than usernames. Twitch emote images are loaded directly from Twitch's public CDN in live overlay mode; the synthetic demo uses local emoji glyphs and works offline.
 
 ## Architecture
 
