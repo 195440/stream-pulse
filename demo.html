@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>StreamPulse Offline Demo</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/overlay.css">
+</head>
+<body class="demo-page">
+  <header class="demo-toolbar">
+    <div class="brand-lockup"><span class="brand-mark" aria-hidden="true"></span><span>Offline demo</span></div>
+    <div class="speed-control" role="group" aria-label="Demo speed">
+      <button type="button" data-speed="1" aria-pressed="false">1x</button>
+      <button type="button" data-speed="4" aria-pressed="true">4x</button>
+      <button type="button" data-speed="8" aria-pressed="false">8x</button>
+    </div>
+  </header>
+  <main class="demo-stage">
+    <div class="overlay-root" id="overlay" data-corner="br" data-demo="true">
+      <section class="pulse-card" aria-label="Simulated chat pulse">
+        <div class="pulse-heading">StreamPulse</div>
+        <div class="pulse-status" aria-live="polite">
+          <span class="status-dot" id="status-dot" data-status="demo"></span>
+          <span id="status-text">Demo live</span>
+        </div>
+        <div><span class="pulse-value" id="pulse-value">0</span><span class="pulse-unit">msg / 5s</span></div>
+        <div class="chatter-count"><strong id="chatter-count">0</strong><br>chatters</div>
+        <canvas class="pulse-canvas" id="pulse-canvas" aria-label="Recent simulated chat rate sparkline"></canvas>
+      </section>
+      <section class="moment-banner" id="moment-banner" role="status" aria-live="assertive" aria-atomic="true">
+        <span class="moment-kicker">Moment detected</span>
+        <strong class="moment-label" id="moment-label">Chat exploded</strong>
+        <span class="moment-time" id="moment-time">00:00</span>
+      </section>
+      <section class="mark-toast" id="mark-toast" role="status" aria-live="assertive" aria-atomic="true">
+        <span class="mark-icon" aria-hidden="true">◆</span>
+        <span>Community mark <strong id="mark-count">3</strong> chatters</span>
+      </section>
+      <div class="rain-layer" id="rain-layer" aria-hidden="true"></div>
+    </div>
+  </main>
+  <p class="demo-caption">Synthetic chat · no Twitch connection</p>
+  <script type="module" src="js/ui-overlay.js"></script>
+</body>
+</html>
