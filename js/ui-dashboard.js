@@ -8,6 +8,7 @@ import { projectMomentMarkers } from "./display.js";
 
 const params = new URLSearchParams(location.search);
 const isDemo = params.get("demo") === "1";
+let simulatorTime = 0; // simulated wall clock in demo mode (0 = not started yet)
 const channel = (params.get("channel") || "").trim().toLowerCase();
 const storageKey = `streampulse:session:${isDemo ? "demo" : channel || "unknown"}`;
 const saved = readSaved();
@@ -203,7 +204,7 @@ function sessionData() {
     version: 1,
     channel,
     startEpoch: timeline.startEpoch,
-    durationMs: Math.max(0, Date.now() - timeline.startEpoch),
+    durationMs: Math.max(0, (isDemo && simulatorTime ? simulatorTime : Date.now()) - timeline.startEpoch),
     totalMessages: total,
     peakRate: Math.max(priorPeak, pulse.peakRate),
     topEmotes: [...top.values()].sort((a, b) => b.count - a.count).slice(0, 10),
@@ -360,7 +361,7 @@ elements.import.addEventListener("change", async () => {
 renderMoments();
 requestAnimationFrame(renderCharts);
 const demoRunStarted = Date.now();
-let simulatorTime = demoRunStarted;
+simulatorTime = demoRunStarted;
 setInterval(() => syncTracker(isDemo ? simulatorTime : Date.now()), 250);
 setInterval(saveSession, 10000);
 addEventListener("beforeunload", saveSession);

@@ -28,8 +28,9 @@ real-browser checks, handled git/GitHub, and added the README "Try it / Built wi
 4. **Codex polish (turn 2, same thread).** The defect list was handed back to the same Codex thread. It fixed canvas sizing,
    added moment markers linked to the table, built the CSS-only stream scene and fake chat panel for the demo, emoji emotes
    in demo mode, inline favicons, a larger overlay card, and added `js/display.js` with tests (45 tests, 180 assertions).
-5. **Two small human-side edits** after the polish: confine the demo overlay to the "stream" area (one CSS line) and pick
-   rain emotes by weighted random among the top five instead of always the top one.
+5. **Three small human-side edits** after the polish: confine the demo overlay to the "stream" area (one CSS line), pick
+   rain emotes by weighted random among the top five instead of always the top one, and make the demo recap use the
+   simulated clock for "Stream length".
 
 ## Why this is a good fit for Codex
 

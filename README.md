@@ -11,7 +11,7 @@ It is built for small and mid-size streamers who need to find the good parts of 
 ## Built with Codex
 
 All application code and tests (and the body of this README) were written by OpenAI Codex from [`SPEC.md`](SPEC.md) in one
-resumable thread; the human-side assistant wrote the spec, verified it in real browsers and made two small edits. The
+resumable thread; the human-side assistant wrote the spec, verified it in real browsers and made three small edits. The
 session ID, setup and the honest split of work are documented in
 [`docs/BUILT_WITH_CODEX.md`](docs/BUILT_WITH_CODEX.md).
 
