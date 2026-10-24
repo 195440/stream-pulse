@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>StreamPulse Dashboard</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-page">
+  <header class="dashboard-header">
+    <a class="brand-lockup" href="index.html" aria-label="StreamPulse home">
+      <span class="brand-mark" aria-hidden="true"></span><span>StreamPulse</span>
+    </a>
+    <div class="connection-pill" aria-live="polite">
+      <span class="status-dot" id="status-dot" data-status="connecting"></span>
+      <span id="status-text">Connecting</span>
+    </div>
+    <div class="session-totals" aria-label="Session totals">
+      <span><strong id="total-messages">0</strong> messages</span>
+      <span><strong id="peak-rate">0</strong> peak / 5s</span>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <section class="chart-section" aria-labelledby="activity-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">Live signal</p><h1 id="activity-title">Chat activity</h1></div>
+        <label class="start-field">Stream started
+          <input type="datetime-local" id="start-time" step="1">
+        </label>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="rate-chart" aria-label="Chat messages per five seconds over the last ten minutes"></canvas>
+        <div class="chart-now"><strong id="current-rate">0</strong><span>msg / 5s now</span></div>
+      </div>
+      <div class="mini-wrap">
+        <span>Whole session</span>
+        <canvas id="mini-chart" aria-label="Whole-session chat activity overview"></canvas>
+      </div>
+    </section>
+
+    <section class="moments-section" aria-labelledby="moments-title">
+      <div class="section-heading compact-heading">
+        <div><p class="eyebrow">Detected highlights</p><h2 id="moments-title">Moments</h2></div>
+        <span class="moment-total"><strong id="moment-count">0</strong> captured</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th scope="col">Time</th><th scope="col">Type</th><th scope="col">Label</th><th scope="col">Peak</th><th scope="col">Chatters</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+          <tbody id="moments-body"></tbody>
+        </table>
+        <p class="empty-state" id="empty-state">Waiting for chat to light up.</p>
+      </div>
+    </section>
+
+    <aside class="exports-panel" aria-labelledby="exports-title">
+      <div><p class="eyebrow">Ready to publish</p><h2 id="exports-title">Exports</h2></div>
+      <label class="privacy-toggle">
+        <input type="checkbox" id="privacy" checked>
+        <span aria-hidden="true"></span>
+        Privacy mode
+      </label>
+      <p class="privacy-copy" id="privacy-copy">Usernames stay out of every export.</p>
+      <div class="export-actions">
+        <button type="button" data-export="chapters">YouTube chapters <span>TXT</span></button>
+        <button type="button" data-export="markdown">Markdown recap <span>MD</span></button>
+        <button type="button" data-export="csv">Moments table <span>CSV</span></button>
+        <button type="button" data-export="json">Session backup <span>JSON</span></button>
+      </div>
+      <label class="import-button" for="session-import">Import JSON session</label>
+      <input class="sr-only" type="file" id="session-import" accept="application/json,.json">
+      <p class="export-status" id="export-status" role="status" aria-live="polite"></p>
+    </aside>
+  </main>
+  <script type="module" src="js/ui-dashboard.js"></script>
+</body>
+</html>
