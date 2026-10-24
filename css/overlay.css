@@ -14,15 +14,15 @@ html.overlay-page,
   position: absolute;
   z-index: 5;
   display: grid;
-  width: clamp(280px, 22vw, 390px);
-  min-height: 116px;
-  padding: 15px 17px;
+  width: clamp(21.5rem, 27.5vw, 30.5rem);
+  min-height: 9rem;
+  padding: 1.15rem 1.3rem;
   border: 1px solid rgba(87, 243, 255, 0.38);
   border-radius: 8px;
   background: linear-gradient(115deg, rgba(8, 12, 22, 0.94), rgba(19, 12, 28, 0.88));
   box-shadow: var(--shadow), inset 3px 0 0 var(--cyan);
   grid-template-columns: 1fr auto;
-  gap: 8px 16px;
+  gap: 0.65rem 1.25rem;
 }
 
 [data-corner="tl"] .pulse-card { top: 28px; left: 28px; }
@@ -35,7 +35,7 @@ html.overlay-page,
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   font-weight: 850;
   text-transform: uppercase;
 }
@@ -46,14 +46,14 @@ html.overlay-page,
   justify-content: flex-end;
   gap: 7px;
   color: var(--muted);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
 }
 
 .pulse-value {
   align-self: end;
-  font-size: 2.6rem;
+  font-size: 3.2rem;
   font-weight: 950;
   line-height: 0.88;
 }
@@ -61,7 +61,7 @@ html.overlay-page,
 .pulse-unit {
   margin-left: 5px;
   color: var(--cyan);
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   font-weight: 850;
   text-transform: uppercase;
 }
@@ -69,13 +69,14 @@ html.overlay-page,
 .chatter-count {
   align-self: end;
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   text-align: right;
 }
 
 .pulse-canvas {
+  display: block;
   width: 100%;
-  height: 26px;
+  height: 2rem;
   grid-column: 1 / -1;
 }
 
@@ -171,13 +172,9 @@ html.overlay-page,
 }
 
 .rain-emote span {
-  padding: 5px 8px;
-  border: 1px solid var(--cyan);
-  border-radius: 5px;
-  background: rgba(8, 12, 22, 0.88);
   color: var(--ink);
-  font-size: calc(var(--size) * 0.26);
-  font-weight: 950;
+  font-size: calc(var(--size) * 0.78);
+  line-height: 1;
 }
 
 @keyframes float-up {
@@ -198,23 +195,250 @@ html.overlay-page,
 .demo-page {
   min-height: 100vh;
   overflow: hidden;
-  background-color: #090d16;
-  background-image:
-    linear-gradient(rgba(87, 243, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(87, 243, 255, 0.045) 1px, transparent 1px);
-  background-size: 40px 40px;
+  background: #05070c;
 }
 
 .demo-stage {
   position: fixed;
   inset: 0;
+  overflow: hidden;
+  background: #05070c;
+}
+
+.stream-scene {
+  position: absolute;
+  inset: 0 24% 0 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 72% 30%, rgba(68, 118, 147, 0.42), transparent 18%),
+    linear-gradient(155deg, #14263a 0%, #101826 38%, #23152c 69%, #080b12 100%);
+  animation: scene-shift 14s ease-in-out infinite alternate;
+}
+
+.stream-scene::before {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 54px 54px;
+  content: "";
+  transform: perspective(480px) rotateX(56deg) scale(1.6) translateY(23%);
+  transform-origin: bottom;
+}
+
+@keyframes scene-shift {
+  from { background-position: 0 0; }
+  to { background-position: 4% 2%; }
+}
+
+.stream-meta {
+  position: absolute;
+  z-index: 4;
+  top: 22px;
+  right: 22px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.stream-meta strong {
+  padding: 5px 8px;
+  border-radius: 4px;
+  background: #ed3658;
+  color: white;
+  font-size: 0.68rem;
+}
+
+.game-hud {
+  position: absolute;
+  z-index: 3;
+  top: 24px;
+  left: 50%;
+  display: flex;
+  min-width: 260px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(3, 6, 12, 0.54);
+  align-items: center;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.62rem;
+  transform: translateX(-50%);
+}
+
+.game-hud strong {
+  color: var(--amber);
+  font-size: 1rem;
+}
+
+.scene-ridge {
+  position: absolute;
+  right: -8%;
+  bottom: 13%;
+  left: -8%;
+  height: 48%;
+  background: #101721;
+  clip-path: polygon(0 74%, 10% 47%, 19% 65%, 31% 22%, 42% 55%, 53% 28%, 66% 64%, 76% 34%, 88% 59%, 100% 31%, 100% 100%, 0 100%);
+}
+
+.scene-ridge-back {
+  bottom: 28%;
+  background: rgba(26, 42, 58, 0.84);
+  filter: blur(2px);
+  opacity: 0.82;
+  transform: scale(1.08);
+}
+
+.scene-ridge-front {
+  box-shadow: 0 -18px 50px rgba(8, 11, 18, 0.7);
+}
+
+.scene-platform {
+  position: absolute;
+  z-index: 2;
+  right: 11%;
+  bottom: 13%;
+  width: 37%;
+  height: 6%;
+  border-top: 3px solid rgba(87, 243, 255, 0.55);
+  background: #070a10;
+  transform: skewX(-18deg);
+}
+
+.scene-player {
+  position: absolute;
+  z-index: 3;
+  right: 30%;
+  bottom: 19%;
+  width: 42px;
+  height: 105px;
+  border-radius: 18px 18px 6px 6px;
+  background: #030507;
+  box-shadow: 0 0 30px rgba(255, 79, 189, 0.18);
+}
+
+.scene-player::before {
+  position: absolute;
+  top: -25px;
+  left: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #030507;
+  content: "";
+}
+
+.scene-player span {
+  position: absolute;
+  top: 27px;
+  left: -32px;
+  width: 86px;
+  height: 12px;
+  border-radius: 4px;
+  background: #030507;
+  transform: rotate(-12deg);
+}
+
+.scene-reticle {
+  position: absolute;
+  z-index: 3;
+  top: 51%;
+  left: 43%;
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(184, 255, 90, 0.66);
+  border-radius: 50%;
+}
+
+.scene-reticle::before,
+.scene-reticle::after {
+  position: absolute;
+  top: 12px;
+  left: -7px;
+  width: 38px;
+  height: 1px;
+  background: rgba(184, 255, 90, 0.66);
+  content: "";
+}
+
+.scene-reticle::after {
+  transform: rotate(90deg);
+}
+
+.demo-chat {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  width: 24%;
+  min-width: 250px;
+  border-left: 1px solid rgba(255, 255, 255, 0.11);
+  background: rgba(9, 11, 18, 0.94);
+  grid-template-rows: 60px minmax(0, 1fr) 42px;
+}
+
+.demo-chat > header,
+.demo-chat > footer {
+  display: flex;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+}
+
+.demo-chat > header strong {
+  color: var(--ink);
+  font-size: 0.76rem;
+}
+
+.demo-chat > footer {
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+  justify-content: flex-start;
+}
+
+.demo-chat-feed {
+  display: flex;
+  min-height: 0;
+  padding: 15px 14px;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 9px;
+}
+
+.demo-chat-line {
+  color: rgba(232, 236, 245, 0.88);
+  font-size: 0.78rem;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+}
+
+.demo-chat-user {
+  margin-right: 4px;
+  font-weight: 850;
+}
+
+.demo-stage .overlay-root {
+  z-index: 10;
+  /* In the demo the overlay covers only the "stream" area, like OBS would: the chat panel stays outside it. */
+  right: max(24%, 250px);
 }
 
 .demo-toolbar {
   position: fixed;
-  z-index: 20;
+  z-index: 30;
   top: 22px;
-  left: 50%;
+  left: 22px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -224,7 +448,6 @@ html.overlay-page,
   border-radius: 8px;
   background: rgba(13, 18, 30, 0.94);
   box-shadow: var(--shadow);
-  transform: translateX(-50%);
 }
 
 .speed-control {
@@ -246,11 +469,13 @@ html.overlay-page,
 
 .demo-caption {
   position: fixed;
-  right: 28px;
-  bottom: 26px;
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 700;
+  z-index: 30;
+  bottom: 12px;
+  left: 18px;
+  margin: 0;
+  color: rgba(196, 205, 220, 0.46);
+  font-size: 0.66rem;
+  font-weight: 650;
 }
 
 @media (max-width: 640px) {
@@ -265,6 +490,7 @@ html.overlay-page,
   }
   .demo-toolbar {
     top: 10px;
+    left: 10px;
     width: calc(100vw - 20px);
     justify-content: space-between;
   }
@@ -274,9 +500,26 @@ html.overlay-page,
   .moment-label {
     font-size: 1.65rem;
   }
+  .stream-scene {
+    right: 34%;
+  }
+  .demo-chat {
+    width: 34%;
+    min-width: 150px;
+  }
+  .game-hud,
+  .stream-meta span {
+    display: none;
+  }
+  .demo-chat-line {
+    font-size: 0.67rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .stream-scene {
+    animation: none;
+  }
   .rain-layer {
     display: flex;
     align-items: center;

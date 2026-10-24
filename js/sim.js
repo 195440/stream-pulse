@@ -5,6 +5,10 @@ const USERS = Array.from({ length: 25 }, (_, index) => ({
 
 const CHAT = ["nice play", "so close", "lets go", "wow", "gg", "that was clean", "no way", "hello chat"];
 const CAPS = ["LETS GOOOO", "THAT WAS INSANE", "NO WAY", "WHAT A PLAY"];
+const EMOTE_STORM = [
+  "Kappa", "Kappa", "Kappa", "Kappa", "Kappa", "Kappa",
+  "KEKW", "LUL", "PogChamp", "Pog", "PepeHands", "EZ", "OMEGALUL",
+];
 
 function mulberry32(seed) {
   let value = seed >>> 0;
@@ -32,9 +36,10 @@ export function createSimulator({ seed = 1, startEpoch = 1700000000000 } = {}) {
     let text = CHAT[Math.floor(rng() * CHAT.length)];
     let emotes = [];
     if (phase >= 20000 && phase < 28000) {
-      text = rng() < 0.78 ? "Kappa Kappa" : "wow Kappa";
-      const starts = text === "Kappa Kappa" ? [0, 6] : [4];
-      emotes = starts.map((start) => ({ id: "25", start, end: start + 4, name: "Kappa" }));
+      const name = EMOTE_STORM[Math.floor(rng() * EMOTE_STORM.length)];
+      text = rng() < 0.78 ? `${name} ${name}` : `wow ${name}`;
+      const starts = text.startsWith("wow ") ? [4] : [0, name.length + 1];
+      emotes = starts.map((start) => ({ id: `sim-${name.toLowerCase()}`, start, end: start + name.length - 1, name }));
     } else if (phase >= 43000 && phase < 51000) {
       text = CAPS[Math.floor(rng() * CAPS.length)];
     } else if (phase >= 65000 && phase < 71000) {

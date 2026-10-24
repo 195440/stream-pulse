@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23080b12'/%3E%3Cpath d='M8 35h11l6-17 10 31 7-18h14' fill='none' stroke='%2357f3ff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <title>StreamPulse Dashboard</title>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/dashboard.css">
@@ -35,8 +36,8 @@
         <canvas id="rate-chart" aria-label="Chat messages per five seconds over the last ten minutes"></canvas>
         <div class="chart-now"><strong id="current-rate">0</strong><span>msg / 5s now</span></div>
       </div>
-      <div class="mini-wrap">
-        <span>Whole session</span>
+      <div class="mini-wrap" aria-label="Whole session overview">
+        <span aria-hidden="true">Whole session</span>
         <canvas id="mini-chart" aria-label="Whole-session chat activity overview"></canvas>
       </div>
     </section>

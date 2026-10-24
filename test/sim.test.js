@@ -31,6 +31,7 @@ test("simulator includes all three scripted spike types", () => {
   const marks = messages.filter((item) => /^!(mark|clip)$/.test(item.text));
   assert.ok(emoteStorm.length > 30);
   assert.ok(emoteStorm.every((item) => item.emotes.length > 0));
+  assert.ok(new Set(emoteStorm.flatMap((item) => item.emotes.map((emote) => emote.name))).size > 3);
   assert.ok(capsHype.length > 30);
   assert.ok(capsHype.every((item) => item.text === item.text.toUpperCase()));
   assert.ok(marks.length > 20);

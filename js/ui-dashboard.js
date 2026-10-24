@@ -4,6 +4,7 @@ import { MarkTracker } from "./marks.js";
 import { PulseTracker } from "./pulse.js";
 import { createSimulator } from "./sim.js";
 import { Timeline } from "./timeline.js";
+import { projectMomentMarkers } from "./display.js";
 
 const params = new URLSearchParams(location.search);
 const isDemo = params.get("demo") === "1";
@@ -22,6 +23,9 @@ let priorPeak = Number(saved?.peakRate) || 0;
 let importedEmotes = saved?.topEmotes ?? [];
 let buckets = Array.isArray(saved?.buckets) ? saved.buckets.slice(-7200) : [];
 let lastTrackerBucket = -Infinity;
+let highlightedMomentId = null;
+let hoveredMomentId = null;
+let focusedMomentId = null;
 
 const elements = {
   statusDot: document.querySelector("#status-dot"),
@@ -119,11 +123,34 @@ async function copyText(text) {
 
 function renderMoments() {
   const moments = timeline.getMoments();
+  hoveredMomentId = null;
+  focusedMomentId = null;
+  highlightedMomentId = null;
   elements.body.replaceChildren();
   elements.empty.hidden = moments.length > 0;
   elements.count.textContent = String(moments.length);
   for (const moment of moments) {
     const row = document.createElement("tr");
+    row.tabIndex = 0;
+    row.dataset.momentId = moment.id;
+    row.addEventListener("pointerenter", () => {
+      hoveredMomentId = moment.id;
+      refreshHighlight();
+    });
+    row.addEventListener("pointerleave", () => {
+      hoveredMomentId = null;
+      refreshHighlight();
+    });
+    row.addEventListener("focusin", () => {
+      focusedMomentId = moment.id;
+      refreshHighlight();
+    });
+    row.addEventListener("focusout", (event) => {
+      if (!row.contains(event.relatedTarget)) {
+        focusedMomentId = null;
+        refreshHighlight();
+      }
+    });
     const values = [formatTimestamp(moment.offsetMs), moment.type, moment.label, moment.peakRate, moment.uniqueChatters];
     values.forEach((value, index) => {
       const cell = document.createElement("td");
@@ -135,17 +162,17 @@ function renderMoments() {
     const group = document.createElement("div");
     group.className = "row-actions";
     const copyButton = button("Copy", async () => {
-        await copyText(formatTimestamp(moment.offsetMs));
-        announce("Timestamp copied.");
-      });
+      await copyText(formatTimestamp(moment.offsetMs));
+      announce("Timestamp copied.");
+    });
     const renameButton = button("Rename", () => {
-        const label = prompt("Rename moment", moment.label);
-        if (label !== null && timeline.rename(moment.id, label)) renderMoments();
-      });
+      const label = prompt("Rename moment", moment.label);
+      if (label !== null && timeline.rename(moment.id, label)) renderMoments();
+    });
     const deleteButton = button("Delete", () => {
-        timeline.delete(moment.id);
-        renderMoments();
-      }, "delete-button");
+      timeline.delete(moment.id);
+      renderMoments();
+    }, "delete-button");
     copyButton.setAttribute("aria-label", `Copy timestamp for ${moment.label}`);
     renameButton.setAttribute("aria-label", `Rename ${moment.label}`);
     deleteButton.setAttribute("aria-label", `Delete ${moment.label}`);
@@ -154,6 +181,14 @@ function renderMoments() {
     row.append(actions);
     elements.body.append(row);
   }
+  refreshHighlight();
+}
+
+function refreshHighlight() {
+  highlightedMomentId = hoveredMomentId ?? focusedMomentId;
+  elements.body.querySelectorAll("tr").forEach((row) => {
+    row.classList.toggle("is-highlighted", row.dataset.momentId === highlightedMomentId);
+  });
 }
 
 function sessionData() {
@@ -238,6 +273,8 @@ function fitCanvas(canvas) {
 
 function drawGraph(canvas, data, mini = false) {
   const { context, width, height, ratio } = fitCanvas(canvas);
+  context.globalAlpha = 1;
+  context.shadowBlur = 0;
   context.clearRect(0, 0, width, height);
   const step = Math.max(1, Math.ceil(data.length / 600));
   const sampled = step === 1 ? data : data.filter((_, index) => index % step === 0 || index === data.length - 1);
@@ -266,6 +303,30 @@ function drawGraph(canvas, data, mini = false) {
   context.shadowColor = context.strokeStyle;
   context.shadowBlur = mini ? 2 * ratio : 8 * ratio;
   context.stroke();
+  drawMarkers(context, width, height, ratio, projectMomentMarkers(data, timeline.getMoments()));
+}
+
+function drawMarkers(context, width, height, ratio, markers) {
+  context.save();
+  context.shadowBlur = 0;
+  for (const marker of markers) {
+    const highlighted = marker.id === highlightedMomentId;
+    const x = Math.max(3 * ratio, Math.min(width - 3 * ratio, marker.position * width));
+    const hasCommunity = marker.type === "community" || marker.type === "both";
+    const lineColor = marker.type === "community" ? "#b8ff5a" : "#ff4fbd";
+    context.globalAlpha = highlighted ? 1 : 0.68;
+    context.strokeStyle = lineColor;
+    context.lineWidth = (highlighted ? 3 : 1.25) * ratio;
+    context.beginPath();
+    context.moveTo(x, 3 * ratio);
+    context.lineTo(x, height - 4 * ratio);
+    context.stroke();
+    context.fillStyle = hasCommunity ? "#b8ff5a" : "#ff4fbd";
+    context.beginPath();
+    context.arc(x, 7 * ratio, (highlighted ? 4.5 : 3) * ratio, 0, Math.PI * 2);
+    context.fill();
+  }
+  context.restore();
 }
 
 function renderCharts() {
@@ -309,7 +370,7 @@ if (isDemo) {
   const simulator = createSimulator({ seed: 2026, startEpoch: demoRunStarted });
   let previous = performance.now();
   function simulate(now) {
-    const delta = Math.min(100, now - previous) * 4;
+    const delta = Math.min(1000, now - previous) * 4;
     previous = now;
     for (const message of simulator.next(delta)) receive(message);
     simulatorTime = demoRunStarted + simulator.elapsed;

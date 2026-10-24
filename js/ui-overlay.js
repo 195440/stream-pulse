@@ -3,6 +3,7 @@ import { MarkTracker } from "./marks.js";
 import { PulseTracker } from "./pulse.js";
 import { createSimulator } from "./sim.js";
 import { formatTimestamp } from "./export.js";
+import { emoteGlyph, formatDemoMessage } from "./display.js";
 
 const params = new URLSearchParams(location.search);
 const overlay = document.querySelector("#overlay");
@@ -31,6 +32,7 @@ const elements = {
   toast: document.querySelector("#mark-toast"),
   markCount: document.querySelector("#mark-count"),
   rain: document.querySelector("#rain-layer"),
+  chat: document.querySelector("#demo-chat-feed"),
 };
 
 const tracker = new PulseTracker({ sensitivity: options.sensitivity });
@@ -87,6 +89,25 @@ function receive(message) {
   if (moment) showMoment(moment);
   if (mark) showMark(mark);
   for (const emote of message.emotes ?? []) recentEmotes.push({ ...emote, ts: message.ts });
+  if (isDemo) appendDemoChat(message);
+}
+
+function appendDemoChat(message) {
+  if (!elements.chat) return;
+  const colors = ["#57f3ff", "#ff82ca", "#b8ff5a", "#ffd166", "#a99cff", "#ff8b73"];
+  const key = String(message.userId || message.user || "viewer");
+  const colorIndex = [...key].reduce((total, character) => total + character.charCodeAt(0), 0) % colors.length;
+  const line = document.createElement("div");
+  line.className = "demo-chat-line";
+  const user = document.createElement("span");
+  user.className = "demo-chat-user";
+  user.style.color = colors[colorIndex];
+  user.textContent = message.displayName || message.user || "viewer";
+  const text = document.createElement("span");
+  text.textContent = `: ${formatDemoMessage(message)}`;
+  line.append(user, text);
+  elements.chat.append(line);
+  while (elements.chat.children.length > 14) elements.chat.firstElementChild.remove();
 }
 
 function trimEmotes(now) {
@@ -101,7 +122,14 @@ function topEmote(now) {
     item.count += 1;
     counts.set(emote.id, item);
   }
-  return [...counts.values()].sort((a, b) => b.count - a.count)[0] ?? null;
+  // Weighted random pick among the five most used emotes, so the rain shows variety but favours the dominant one.
+  const top = [...counts.values()].sort((a, b) => b.count - a.count).slice(0, 5);
+  let ticket = Math.random() * top.reduce((sum, item) => sum + item.count, 0);
+  for (const item of top) {
+    ticket -= item.count;
+    if (ticket <= 0) return item;
+  }
+  return top[0] ?? null;
 }
 
 function spawnRain(now) {
@@ -117,7 +145,7 @@ function spawnRain(now) {
   node.style.left = `${3 + Math.random() * 90}%`;
   if (isDemo) {
     const label = document.createElement("span");
-    label.textContent = emote.name;
+    label.textContent = emoteGlyph(emote.name);
     node.append(label);
   } else {
     const image = document.createElement("img");
@@ -185,7 +213,7 @@ if (isDemo) {
     });
   });
   function frame(now) {
-    const elapsed = Math.min(100, now - previous);
+    const elapsed = Math.min(1000, now - previous);
     previous = now;
     for (const message of simulator.next(elapsed * speed)) receive(message);
     latestTs = startedAt + simulator.elapsed;
